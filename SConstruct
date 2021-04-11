@@ -6,7 +6,7 @@ customs = ['../custom.py']
 opts = Variables(customs, ARGUMENTS)
 
 # Gets the standart flags CC, CCX, etc.
-env = DefaultEnvironment()
+env = Environment(ENV = os.environ)
 
 # Define our parameters
 opts.Add(EnumVariable('target', "Compilation target", 'release', ['d', 'debug', 'r', 'release']))
@@ -51,7 +51,8 @@ if env['platform'] == 'windows':
 
         env.Append(CCFLAGS = ['-DWIN32', '-D_WIN32', '-D_WINDOWS', '-W3', '-GR', '-D_CRT_SECURE_NO_WARNINGS'])
         if env['target'] in ('debug', 'd'):
-            env.Append(CCFLAGS = ['-EHsc', '-D_DEBUG', '-MDd'])
+            env.Append(CCFLAGS = ['-EHsc', '-D_DEBUG', '-MDd', '-Zi', '-FS'])
+            env.Append(LINKFLAGS = ['-DEBUG:FULL'])
         else:
             env.Append(CCFLAGS = ['-O2', '-EHsc', '-DNDEBUG', '-MD'])
     # untested
